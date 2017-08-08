@@ -21,13 +21,6 @@ namespace Cirno5.Controllers
             this.ArticleStorage = articleStorage;
         }
 
-        // GET api/articles
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            throw new NotImplementedException();
-        }
-
         // GET api/articles/{Link}
         [HttpGet("{link}")]
         public async Task<Article> GetAsync(string link)
