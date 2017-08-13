@@ -1,9 +1,9 @@
 import * as React from "react"
 import * as renderer from "react-test-renderer"
 
-import { Hello } from "../Hello"
+import { Layout } from "../Layout"
 
 it("Hello renders correctly", () => {
-  const tree = renderer.create(<Hello compiler="TypeScript" framework="React" />).toJSON()
+  const tree = renderer.create(<Layout />).toJSON()
   expect(tree).toMatchSnapshot()
 })
