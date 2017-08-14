@@ -11,6 +11,7 @@ using Cirno5.Services.Storage;
 using Cirno5.Models.Article;
 using Cirno5.Services.Storage.Nosql;
 using Microsoft.Azure.Documents;
+using Cirno5.Models.Articles;
 
 namespace Cirno5
 {
@@ -46,6 +47,12 @@ namespace Cirno5
                 connection.CreateCollectionIfNotExistsAsync().Wait();
             }
             services.AddSingleton<IStorage<Article>>(new NoSqlArticleStorage
+            {
+                Connection = connection,
+                DocumentClient = connection.GetClient(),
+            });
+
+            services.AddSingleton<IStorage<ArticleInfo>>(new NoSqlArticleInfoStorage
             {
                 Connection = connection,
                 DocumentClient = connection.GetClient(),

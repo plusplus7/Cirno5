@@ -9,7 +9,8 @@ export class MockCirnoApi implements ICirnoApi {
             avatarUrl: "http://7xlt42.com1.z0.glb.clouddn.com/blog_avatar.png-fullpercent",
             description: [
                 "Hi, 欢迎来到我的个人博客",
-                "Life is tough, take it easy:)",
+                "Life is tough",
+                "Take it easy:)",
             ],
             navbarButtonTexts: {
                 "Home": "主页",
