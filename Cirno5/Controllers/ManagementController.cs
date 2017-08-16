@@ -50,11 +50,12 @@ namespace Cirno5.Controllers
                 Id = Guid.NewGuid(),
                 Link = request.Link,
                 ContentType = request.ContentType,
+                CreatedDate = request.CreatedDate,
                 Outline = articleContent.Substring(0, articleContent.Length>ManagementController.defaultOutlineLength?articleContent.Length:ManagementController.defaultOutlineLength),
                 Tags = request.Tags,
             };
 
-            if ((await this.ArticleStorage.GetItemsAsync(d => d.Link == request.Link)).ToList().Count != 0)
+            if ((await this.ArticleStorage.GetItemsAsync(d => d.Link == request.Link, -1)).ToList().Count != 0)
             {
                 return new ErrorResponse
                 {
@@ -64,7 +65,7 @@ namespace Cirno5.Controllers
                 };
             }
 
-            if ((await this.ArticleInfoStorage.GetItemsAsync(d => d.Link == request.Link)).ToList().Count != 0)
+            if ((await this.ArticleInfoStorage.GetItemsAsync(d => d.Link == request.Link, -1)).ToList().Count != 0)
             {
 
                 return new ErrorResponse

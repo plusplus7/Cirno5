@@ -17,7 +17,10 @@ namespace Cirno5.Models.Request
         [JsonProperty(PropertyName = "contentUrl")]
         public string ContentUrl { get; set; }
 
+        [JsonProperty(PropertyName = "createdDate")]
+        public DateTime CreatedDate { get; set; }
+
         [JsonProperty(PropertyName = "tags")]
-        public IEnumerable<string> Tags { get; set; }
+        public IList<string> Tags { get; set; }
     }
 }

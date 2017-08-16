@@ -46,13 +46,13 @@ namespace Cirno5.Services.Storage.Nosql
             return results;
         }
 
-        public async Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> predicate)
+        public async Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> predicate, int maxCount = -1)
         {
             IDocumentQuery<T> query = this.DocumentClient.CreateDocumentQuery<T>(
                 this.Connection.GetCollectionUri(),
                 new FeedOptions
                 {
-                    MaxItemCount = -1
+                    MaxItemCount = maxCount
                 })
                 .Where(predicate)
                 .AsDocumentQuery();

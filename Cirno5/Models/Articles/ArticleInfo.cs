@@ -17,10 +17,13 @@ namespace Cirno5.Models.Articles
         [JsonProperty(PropertyName = "contentType")]
         public string ContentType { get; set; }
 
+        [JsonProperty(PropertyName = "createdDate")]
+        public DateTime CreatedDate { get; set; }
+
         [JsonProperty(PropertyName = "outline")]
         public string Outline { get; set; }
 
         [JsonProperty(PropertyName = "tags")]
-        public IEnumerable<string> Tags { get; set; }
+        public IList<string> Tags { get; set; }
     }
 }
