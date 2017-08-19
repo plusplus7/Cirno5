@@ -1,4 +1,4 @@
-export interface IndexPageModel {
+export interface IndexPageInfo {
     personalInfomation: string
     avatarUrl: string
     description: string[]

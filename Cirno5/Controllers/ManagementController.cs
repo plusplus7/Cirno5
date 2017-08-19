@@ -51,7 +51,16 @@ namespace Cirno5.Controllers
                 Link = request.Link,
                 ContentType = request.ContentType,
                 CreatedDate = request.CreatedDate,
-                Outline = articleContent.Substring(0, articleContent.Length>ManagementController.defaultOutlineLength?articleContent.Length:ManagementController.defaultOutlineLength),
+                Content = new ArticleInfoContent
+                {
+                    Type = "A",
+                    Content = new Dictionary<string, string>()
+                    {
+                        { "author", "plusplus7" },
+                        { "title", request.ArticleTitle },
+                        { "outline", articleContent.Substring(0, articleContent.Length > ManagementController.defaultOutlineLength ? articleContent.Length : ManagementController.defaultOutlineLength) }
+                    },
+                },
                 Tags = request.Tags,
             };
 

@@ -20,6 +20,9 @@ namespace Cirno5.Models.Request
         [JsonProperty(PropertyName = "createdDate")]
         public DateTime CreatedDate { get; set; }
 
+        [JsonProperty(PropertyName = "articleTitle")]
+        public string ArticleTitle { get; set; }
+
         [JsonProperty(PropertyName = "tags")]
         public IList<string> Tags { get; set; }
     }

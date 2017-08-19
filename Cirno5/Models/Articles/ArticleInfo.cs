@@ -20,8 +20,8 @@ namespace Cirno5.Models.Articles
         [JsonProperty(PropertyName = "createdDate")]
         public DateTime CreatedDate { get; set; }
 
-        [JsonProperty(PropertyName = "outline")]
-        public string Outline { get; set; }
+        [JsonProperty(PropertyName = "content")]
+        public ArticleInfoContent Content { get; set; }
 
         [JsonProperty(PropertyName = "tags")]
         public IList<string> Tags { get; set; }
