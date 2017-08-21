@@ -26,7 +26,7 @@ export class FrontPage extends React.Component<FrontPageProps, FrontPageState> {
     render() {
         if (this.state.arrowClicked) {
             return (
-                <Redirect to="/home"/>
+                <Redirect to="/blog"/>
             )
         }
         return (
