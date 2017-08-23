@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Cirno5.Models.Response
 {
-    public class BaseResponse :IActionResult
+    public class BaseResponse : IActionResult
     {
         [JsonProperty(PropertyName = "code")]
         public int Code { get; set; }

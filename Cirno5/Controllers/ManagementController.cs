@@ -64,7 +64,7 @@ namespace Cirno5.Controllers
                 Tags = request.Tags,
             };
 
-            if ((await this.ArticleStorage.GetItemsAsync(d => d.Link == request.Link, -1)).ToList().Count != 0)
+            if ((await this.ArticleStorage.GetItemsAsync(d => d.Link == request.Link, -1, 0)).ToList().Count != 0)
             {
                 return new ErrorResponse
                 {
@@ -74,7 +74,7 @@ namespace Cirno5.Controllers
                 };
             }
 
-            if ((await this.ArticleInfoStorage.GetItemsAsync(d => d.Link == request.Link, -1)).ToList().Count != 0)
+            if ((await this.ArticleInfoStorage.GetItemsAsync(d => d.Link == request.Link, -1, 0)).ToList().Count != 0)
             {
 
                 return new ErrorResponse

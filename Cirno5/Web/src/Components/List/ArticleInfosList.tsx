@@ -7,6 +7,7 @@ import  * as style from './ArticleInfosList.css';
 
 import { ArticleInfo } from '../../Models/ArticleInfo';
 import CirnoApi from '../../Services/CirnoServiceFactory';
+import AutoComplete from 'material-ui/AutoComplete';
 
 export interface ArticleInfosListProps {
 }
@@ -19,7 +20,7 @@ export class ArticleInfosList extends React.Component<ArticleInfosListProps, Art
     constructor() {
         super();
         this.state = {
-            articleInfos: CirnoApi.GetArticleInfos("2333", 10),
+            articleInfos: CirnoApi.GetArticleInfos("2333", 10, 0),
         };
     }
 
@@ -27,30 +28,35 @@ export class ArticleInfosList extends React.Component<ArticleInfosListProps, Art
 
         return (
             <div className={style.ArticleInfosListContent}>
-            {
-                this.state.articleInfos.map((articleInfo, index) => {
-                    if (articleInfo.content.type === 'A') {
-                        return (
-                            <div key={index}>
-                            <br/>
-                            <Paper zDepth={2}>
-                                <Card>
-                                    <CardTitle title={articleInfo.content.properties["title"]} subtitle={articleInfo.content.properties["author"]} />
-                                    <CardText>
-                                        {articleInfo.content.properties["outline"]}
-                                    </CardText>
-                                    <CardActions>
-                                        <FlatButton label="More" />
-                                    </CardActions>
-                                </Card>
-                            </Paper>
-                            </div>
-                        )
-                    } else {
-                        return null;
-                    }
-                })
-            }
+                <AutoComplete
+                    hintText="Search article"
+                    dataSource={[]}
+                    onUpdateInput={(value: string) => { return "Not implemented yet {" + value + "}"; }}
+                />
+                {
+                    this.state.articleInfos.map((articleInfo, index) => {
+                        if (articleInfo.content.type === 'A') {
+                            return (
+                                <div key={index}>
+                                    <br />
+                                    <Paper zDepth={2}>
+                                        <Card>
+                                            <CardTitle title={articleInfo.content.properties["title"]} subtitle={articleInfo.content.properties["author"]} />
+                                            <CardText>
+                                                {articleInfo.content.properties["outline"]}
+                                            </CardText>
+                                            <CardActions>
+                                                <FlatButton label="More" />
+                                            </CardActions>
+                                        </Card>
+                                    </Paper>
+                                </div>
+                            )
+                        } else {
+                            return null;
+                        }
+                    })
+                }
             </div>
         );
     }

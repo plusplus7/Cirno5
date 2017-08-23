@@ -25,7 +25,7 @@ namespace Cirno5.Controllers
         [HttpGet("{link}")]
         public async Task<Article> GetAsync(string link)
         {
-            return (await this.ArticleStorage.GetItemsAsync(x => x.Link == link, 1)).First();
+            return await this.ArticleStorage.GetItemAsync(x => x.Link == link);
         }
 
         // POST api/articles

@@ -12,14 +12,27 @@ namespace Cirno5.Filters
 {
     public class ErrorFilter : ExceptionFilterAttribute
     {
+        public const string ServerError = "ServerError";
+        public const string BadRequest = "BadRequest";
+
         public override void OnException(ExceptionContext context)
         {
             if (context.Exception is NotImplementedException)
             {
-                context.Result = new ErrorResponse {
+                context.Result = new ErrorResponse
+                {
                     Code = 501,
                     Message = "This method has not implemented yet",
-                    Status="ServerError.NotImplemented",
+                    Status = $"{ServerError}.NotImplemented",
+                };
+            }
+            if (context.Exception is KeyNotFoundException)
+            {
+                context.Result = new ErrorResponse
+                {
+                    Code = 404,
+                    Message = context.Exception.Message,
+                    Status = $"{BadRequest}BadRequest.NoSuchEntity",
                 };
             }
         }

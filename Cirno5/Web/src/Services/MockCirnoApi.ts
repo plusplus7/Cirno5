@@ -26,8 +26,8 @@ export class MockCirnoApi implements ICirnoApi {
         }
     }
 
-    GetArticleInfos(tag: string, maxCount: number): ArticleInfo[] {
-        console.log("Get article infos from mock storage with tag " + tag + ", maxCount: " + maxCount);
+    GetArticleInfos(tag: string, maxCount: number, index: number): ArticleInfo[] {
+        console.log("Get article infos from mock storage with tag " + tag + ", maxCount: " + maxCount + ", index: " + index);
         return [
             {
                 id: "12345678-1234-1234-1234-123456781234",

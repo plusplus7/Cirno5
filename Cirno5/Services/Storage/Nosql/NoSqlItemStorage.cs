@@ -46,21 +46,41 @@ namespace Cirno5.Services.Storage.Nosql
             return results;
         }
 
-        public async Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> predicate, int maxCount = -1)
+        public async Task<T> GetItemAsync(Expression<Func<T, bool>> predicate)
+        {
+            var results = await this.GetItemsAsync(predicate, 1, 0);
+            if (results.ToList().Count != 1)
+            {
+                throw new KeyNotFoundException($"{nameof(T)}: No such entity");
+            }
+            return results.First();
+        }
+
+        public async Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> predicate, int maxCount = -1, int index = 0)
         {
             IDocumentQuery<T> query = this.DocumentClient.CreateDocumentQuery<T>(
                 this.Connection.GetCollectionUri(),
                 new FeedOptions
                 {
-                    MaxItemCount = maxCount
+                    MaxItemCount = maxCount,
                 })
                 .Where(predicate)
                 .AsDocumentQuery();
 
             List<T> results = new List<T>();
-            while(query.HasMoreResults)
+            FeedResponse<T> result = null;
+            while (query.HasMoreResults)
             {
-                results.AddRange(await query.ExecuteNextAsync<T>());
+                if (result == null || result.Count < index)
+                {
+                    result = await query.ExecuteNextAsync<T>();
+                    index -= result.Count;
+                }
+                if (result.Count >= index)
+                {
+                    results.AddRange(result.Skip(index));
+                    index = 0;
+                }
             }
 
             return results;
