@@ -8,10 +8,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Cirno5.Services.Storage;
-using Cirno5.Models.Article;
+using Cirno5.Models.Articles;
 using Cirno5.Services.Storage.Nosql;
 using Microsoft.Azure.Documents;
-using Cirno5.Models.Articles;
 
 namespace Cirno5
 {

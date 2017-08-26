@@ -12,7 +12,13 @@ export class SectionPage extends React.Component<SectionPageProps> {
         return (
             <div>
                 <TopNavigation TopNavigationButtonTexts={this.props.TopNavigationButtonTexts} section={this.props.section}/>
-                <ArticleInfosList />
+                {
+                    function () {
+                        if (this.props.section === "blog") {
+                            return (<ArticleInfosList />)
+                        }
+                    }.call(this)
+                }
             </div>
         )
     }

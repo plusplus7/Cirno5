@@ -68,19 +68,25 @@ namespace Cirno5.Services.Storage.Nosql
                 .AsDocumentQuery();
 
             List<T> results = new List<T>();
-            FeedResponse<T> result = null;
-            while (query.HasMoreResults)
+            while (query.HasMoreResults && results.Count() < maxCount)
             {
-                if (result == null || result.Count < index)
+                FeedResponse<T> result = await query.ExecuteNextAsync<T>();
+                if (result.Any())
                 {
-                    result = await query.ExecuteNextAsync<T>();
-                    index -= result.Count;
+                    if (result.Count < index)
+                    {
+                        index -= result.Count;
+                    }
+                    else
+                    {
+                        results.AddRange(result.Skip(index));
+                        index = 0;
+                    }
                 }
-                if (result.Count >= index)
-                {
-                    results.AddRange(result.Skip(index));
-                    index = 0;
-                }
+            }
+            if (results.Count() > maxCount)
+            {
+                results.RemoveRange(maxCount, results.Count() - maxCount);
             }
 
             return results;
