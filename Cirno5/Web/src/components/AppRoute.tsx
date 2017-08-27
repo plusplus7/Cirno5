@@ -28,10 +28,7 @@ export class AppRoute extends React.Component<AppRouteProps> {
                 <MuiThemeProvider>
                     <div className="pageBody" style={{background: "linear-gradient(to bottom right, rgba(77,77,77,0), rgba(77,77,77,1))" }}>
                         <Route exact={true} path="/" render={() => <FrontPage welcomeMessages={Chinese.WelcomeMessage} arrowMessage={Chinese.ArrowMessage} />} />
-                        <Route path="/:section" render={(props: any) =>
-                            <SectionPage
-                                TopNavigationButtonTexts={Chinese.TopNavigationButtonTexts} section={props.match.params.section} />
-                        } />
+                        <Route path="/:section" render={() => <SectionPage TopNavigationButtonTexts={Chinese.TopNavigationButtonTexts} /> } />
                     </div>
             </MuiThemeProvider>
         )

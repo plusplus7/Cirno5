@@ -13,8 +13,12 @@ let markdown = "# +7的购机指南问题\n\n各位同学买电脑之前，不�
 
 export class MockCirnoApi implements ICirnoApi {
 
-    GetIndexPageInfo(): IndexPageInfo {
-        return {
+    GetIndexPageInfo(before: () => void, success: (data: IndexPageInfo) => void, failed: (error: any) => void): void {
+        console.log("Getting index page info from mock storage");
+
+        before();
+
+        var data = {
             personalInfomation: "plusplus7's blog",
             avatarUrl: "http://7xlt42.com1.z0.glb.clouddn.com/blog_avatar.png-fullpercent",
             description: [
@@ -28,23 +32,41 @@ export class MockCirnoApi implements ICirnoApi {
                 "Blog": "博客",
                 "Storage": "储物间",
             }
+        } as IndexPageInfo;
+
+        success(data);
+
+        if (failed == null) {
+            failed("Failed");
         }
     }
 
-    GetArticle(link: string): Article {
+    GetArticle(link: string, before: () => void, success: (data: Article) => void, failed: (error: any) => void): void {
         console.log("Get article from mock storage with " + link + ".");
-        return {
+
+        before();
+
+        var data = {
             id: "12345671-1234-1234-1234-123456781234",
             link: "Zelda",
             contentType: "markdown",
             content: markdown
 
-        } as Article
+        } as Article;
+
+        success(data);
+
+        if (failed == null) {
+            failed("Failed")
+        }
     }
 
-    GetArticleInfos(tag: string, maxCount: number, index: number): ArticleInfo[] {
+    GetArticleInfos(tag: string, maxCount: number, index: number, before: () => void, success: (data: ArticleInfo[]) => void, failed: (error: any) => void): void {
         console.log("Get article infos from mock storage with tag " + tag + ", maxCount: " + maxCount + ", index: " + index);
-        return [
+
+        before();
+
+        var data = [
             {
                 id: "12345678-1234-1234-1234-123456781234",
                 link: "Zelda",
@@ -150,6 +172,12 @@ export class MockCirnoApi implements ICirnoApi {
                 } as ArticleInfoContent,
                 tags: ["123", "457"]
             } as ArticleInfo,
-        ];
+        ] as ArticleInfo[];
+
+        success(data);
+
+        if (failed == null) {
+            failed("Failed");
+        }
     }
 }

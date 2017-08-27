@@ -1,39 +1,43 @@
 import * as React from 'react';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import FontIcon from 'material-ui/FontIcon';
-import { Redirect } from 'react-router-dom'
 
 interface TopNavigationProps {
     TopNavigationButtonTexts: { [section: string]: string[] }
     section: string
+    onSectionChange: (newSection: string) => void
 }
 
 interface TopNavigationState {
-    clickedSection: string
+    currentSection: string
 }
 
 export class TopNavigation extends React.Component<TopNavigationProps, TopNavigationState> {
 
-    constructor(){
-        super();
+    constructor(props: TopNavigationProps){
+        super(props);
         this.state ={
-            clickedSection: ""
+            currentSection: this.props.section
         }
     }
 
-    componentWillReceiveProps() {
+    componentWillReceiveProps(nextProps: TopNavigationProps) {
+        if (this.state.currentSection != nextProps.section) {
+            this.setState({
+                currentSection: nextProps.section
+            })
+        }
+    }
+
+    sectionOnClick(section: string) {
+        this.props.onSectionChange(section);
         this.setState({
-            clickedSection: ""
-        })
+            currentSection: section
+        });
     }
     public render() {
-        if (this.state.clickedSection !== "") {
-            return (
-                <Redirect to={"/" + this.state.clickedSection}/>
-            )
-        }
         return (
-            <Tabs value={this.props.section}>
+            <Tabs value={this.state.currentSection}>
                 <Tab
                     icon={
                         <FontIcon className="material-icons">
@@ -41,7 +45,7 @@ export class TopNavigation extends React.Component<TopNavigationProps, TopNaviga
                         </FontIcon>
                     }
                     label={this.props.TopNavigationButtonTexts["Blog"][0]}
-                    onClick={() => this.setState({clickedSection: "blog"})}
+                    onClick={() => this.sectionOnClick("blog")}
                     value={"blog"}
                 />
                 <Tab
@@ -51,7 +55,7 @@ export class TopNavigation extends React.Component<TopNavigationProps, TopNaviga
                         </FontIcon>
                     }
                     label={this.props.TopNavigationButtonTexts["Game"][1]}
-                    onClick={() => this.setState({clickedSection: "game"})}
+                    onClick={() => this.sectionOnClick("game")}
                     value={"game"}
                 />
                 <Tab
@@ -61,7 +65,7 @@ export class TopNavigation extends React.Component<TopNavigationProps, TopNaviga
                         </FontIcon>
                     }
                     label={this.props.TopNavigationButtonTexts["Storage"][1]}
-                    onClick={() => this.setState({clickedSection: "storage"})}
+                    onClick={() => this.sectionOnClick("storage")}
                     value={"storage"}
                 />
                 <Tab
@@ -71,7 +75,7 @@ export class TopNavigation extends React.Component<TopNavigationProps, TopNaviga
                         </FontIcon>
                     }
                     label={this.props.TopNavigationButtonTexts["Aboutme"][1]}
-                    onClick={() => this.setState({clickedSection: "aboutme"})}
+                    onClick={() => this.sectionOnClick("aboutme")}
                     value={"aboutme"}
                 />
             </Tabs>

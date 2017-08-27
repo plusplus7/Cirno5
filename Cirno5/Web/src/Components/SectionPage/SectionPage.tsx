@@ -1,24 +1,84 @@
 import * as React from 'react';
 import { ArticleInfosList } from '../List/ArticleInfosList';
+import { ArticleComponent } from '../Article/ArticleComponent';
 import { TopNavigation } from '../TopNavigation/TopNavigation';
+import { Route, Redirect } from "react-router-dom"
 
 interface SectionPageProps {
     TopNavigationButtonTexts:  { [section: string]: string[] }
-    section: string
+}
+interface SectionPageState {
+    nextSection: string
 }
 
-export class SectionPage extends React.Component<SectionPageProps> {
+export class SectionPage extends React.Component<SectionPageProps, SectionPageState> {
+
+    constructor() {
+        super();
+        this.state = {
+            nextSection: ""
+        }
+    }
+
+    componentWillReceiveProps() {
+        this.setState({
+            nextSection: ""
+        })
+    }
+
     public render() {
+        if (this.state.nextSection !== "") {
+            return (
+                <Redirect to={"/" + this.state.nextSection} />
+            )
+        }
         return (
             <div>
-                <TopNavigation TopNavigationButtonTexts={this.props.TopNavigationButtonTexts} section={this.props.section}/>
-                {
-                    function () {
-                        if (this.props.section === "blog") {
-                            return (<ArticleInfosList />)
-                        }
-                    }.call(this)
-                }
+                <Route 
+                    path="/:section"
+                    render={
+                        (props) =>
+                            <TopNavigation 
+                                TopNavigationButtonTexts={this.props.TopNavigationButtonTexts}
+                                section={props.match.params.section}
+                                onSectionChange={(newSection: string) => this.setState({ nextSection: newSection })}
+                            />
+                    }
+                />
+                <Route exact path="/blog" render={() => {
+                    return (
+                        <div>
+                            <ArticleInfosList tag={"233"} />
+                        </div>
+                    )
+                }} />
+                <Route path="/blog/:articleLink" render={(props) => {
+                    console.log("!");
+                    return (
+                        <div>
+                            <ArticleComponent articleLink={props.match.params.articleLink} />
+                        </div>
+                    )
+                }} />
+                <Route path="/game" render={() => {
+                    return (
+                        <div></div>
+                    )
+                }} />
+
+                <Route path="/storage" render={() => {
+                    return (
+                        <div>
+                        </div>
+                    )
+                }} />
+
+                <Route path="/aboutme" render={() => {
+                    return (
+                        <div>
+                        </div>
+                    )
+                }} />
             </div>
         )
     }
