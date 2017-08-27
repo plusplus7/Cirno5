@@ -2,7 +2,6 @@ import * as React from "react"
 import { Article } from '../../Models/Article';
 import CirnoApi from '../../Services/CirnoServiceFactory';
 import * as Showdown from "showdown";
-import Paper from 'material-ui/Paper';
 import * as Style from './ArticleComponent.css';
 
 interface ArticleComponentProps {
@@ -69,9 +68,7 @@ export class ArticleComponent extends React.Component<ArticleComponentProps, Art
             var con = new Showdown.Converter()
             var html =con.makeHtml(this.state.article.content);
             return (
-                <div className={Style.ArticleComponentContent}>
-                <Paper zDepth={2} dangerouslySetInnerHTML={{ __html: html }}>
-                </Paper>
+                <div className={Style.ArticleComponentContent} dangerouslySetInnerHTML={{ __html: html }}>
                 </div>
             )
         }
