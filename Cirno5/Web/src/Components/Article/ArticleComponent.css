@@ -1,8 +1,13 @@
 .ArticleComponentContent {
-    width: 65%;
+    padding: 35px;
+}
+
+.ArticleComponentPaper {
+    width: 85%;
     height: 100%;
     margin: auto;
     top: 20%;
     left: 20%;
     opacity: 0.9;
+    padding: 35px;
 }

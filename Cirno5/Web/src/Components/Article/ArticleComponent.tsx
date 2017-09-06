@@ -3,6 +3,7 @@ import { Article } from '../../Models/Article';
 import CirnoApi from '../../Services/CirnoServiceFactory';
 import * as Showdown from "showdown";
 import * as Style from './ArticleComponent.css';
+import Paper from 'material-ui/Paper';
 
 interface ArticleComponentProps {
     articleLink: string
@@ -66,10 +67,12 @@ export class ArticleComponent extends React.Component<ArticleComponentProps, Art
         console.log(this.state);
         if (this.state.status === "loaded"){
             var con = new Showdown.Converter()
-            var html =con.makeHtml(this.state.article.content);
+            var html = con.makeHtml(this.state.article.content);
             return (
-                <div className={Style.ArticleComponentContent} dangerouslySetInnerHTML={{ __html: html }}>
-                </div>
+                <Paper zDepth={1} className={Style.ArticleComponentPaper}>
+                    <div className={Style.ArticleComponentContent} dangerouslySetInnerHTML={{ __html: html }}>
+                    </div>
+                </Paper>
             )
         }
         return (
