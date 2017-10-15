@@ -62,13 +62,16 @@ export class SectionPage extends React.Component<SectionPageProps, SectionPageSt
                 }} />
                 <Route path="/game" render={() => {
                     return (
-                        <div></div>
+                        <div>
+                            <ArticleComponent articleLink={"game"} />
+                        </div>
                     )
                 }} />
 
                 <Route path="/storage" render={() => {
                     return (
                         <div>
+                            <ArticleComponent articleLink={"storage"} />
                         </div>
                     )
                 }} />
@@ -76,6 +79,7 @@ export class SectionPage extends React.Component<SectionPageProps, SectionPageSt
                 <Route path="/aboutme" render={() => {
                     return (
                         <div>
+                            <ArticleComponent articleLink={"aboutme"} />
                         </div>
                     )
                 }} />
