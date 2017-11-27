@@ -53,7 +53,6 @@ export class SectionPage extends React.Component<SectionPageProps, SectionPageSt
                     )
                 }} />
                 <Route path="/blog/:articleLink" render={(props) => {
-                    console.log("!");
                     return (
                         <div>
                             <ArticleComponent articleLink={props.match.params.articleLink} />

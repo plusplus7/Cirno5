@@ -9,9 +9,11 @@ using Cirno5.Models.Response;
 using System.Net.Http;
 using Cirno5.Services.Storage;
 using Cirno5.Models.Articles;
+using Microsoft.AspNetCore.Cors;
 
 namespace Cirno5.Controllers
 {
+    [EnableCors("DebugPolicy")]
     [Route("api/[controller]")]
     [ErrorFilter]
     public class IndexPageInfoController: Controller

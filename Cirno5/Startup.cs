@@ -33,6 +33,12 @@ namespace Cirno5
         {
             // Add framework services.
             services.AddMvc();
+            services.AddCors(o => o.AddPolicy("DebugPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
 
             NoSqlConnection connection = null;
             if (Configuration["Environment"].Equals("Dev"))

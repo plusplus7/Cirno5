@@ -7,10 +7,11 @@ using Cirno5.Filters;
 using Cirno5.Services.Storage;
 using Cirno5.Models.Articles;
 using Cirno5.Models.Response;
+using Microsoft.AspNetCore.Cors;
 
 namespace Cirno5.Controllers
 {
-
+    [EnableCors("DebugPolicy")]
     [Route("api/[controller]")]
     [ErrorFilter]
     public class ArticleController : Controller

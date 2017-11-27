@@ -71,6 +71,7 @@ export class ArticleInfosList extends React.Component<ArticleInfosListProps, Art
     }
 
     public render() {
+        console.log(this.state);
         return (
             <div className={style.ArticleInfosListContent}>
                 <AutoComplete
