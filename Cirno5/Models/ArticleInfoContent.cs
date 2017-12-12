@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cirno5.Models.Articles
 {
-    public class ArticleInfoContent
+    public class ArticleInfoContent 
     {
         [JsonProperty(PropertyName = "type")]
         public string Type { get; set;  }

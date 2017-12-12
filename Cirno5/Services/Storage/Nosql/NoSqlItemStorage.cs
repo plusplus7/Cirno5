@@ -15,15 +15,13 @@ namespace Cirno5.Services.Storage.Nosql
     public class NoSqlItemStorage<T> : IStorage<T>
     {
 
-        protected string ItemType { get; set; }
         public IDocumentClient DocumentClient { get; set; }
         public NoSqlConnection Connection { get; set; }
 
         public async Task CreateAsync(T item)
         {
             var result = JObject.FromObject(item);
-            result.Add("ItemType", this.ItemType);
-            await DocumentClient.CreateDocumentAsync(
+            await DocumentClient.UpsertDocumentAsync(
                 Connection.GetCollectionUri(),
                 result);
         }
@@ -48,45 +46,37 @@ namespace Cirno5.Services.Storage.Nosql
 
         public async Task<T> GetItemAsync(Expression<Func<T, bool>> predicate)
         {
-            var results = await this.GetItemsAsync(predicate, 1, 0);
-            if (results.ToList().Count != 1)
+            var results = await this.GetItemsAsync(predicate);
+            if (results.ToList().Count == 0)
             {
-                throw new KeyNotFoundException($"{nameof(T)}: No such entity");
+                throw new KeyNotFoundException($"{typeof(T).FullName}: No such entity");
             }
+
+            if (results.ToList().Count > 1)
+            {
+                throw new ArgumentException($"{typeof(T).FullName}: Too many entities found");
+            }
+
             return results.First();
         }
 
-        public async Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> predicate, int maxCount = -1, int index = 0)
+        public async Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> predicate, int maxCount = 1, string continuationToken = null)
         {
             IDocumentQuery<T> query = this.DocumentClient.CreateDocumentQuery<T>(
                 this.Connection.GetCollectionUri(),
                 new FeedOptions
                 {
+                    RequestContinuation = continuationToken,
                     MaxItemCount = maxCount,
                 })
                 .Where(predicate)
                 .AsDocumentQuery();
 
             List<T> results = new List<T>();
-            while (query.HasMoreResults && results.Count() < maxCount)
+            while (query.HasMoreResults)
             {
                 FeedResponse<T> result = await query.ExecuteNextAsync<T>();
-                if (result.Any())
-                {
-                    if (result.Count < index)
-                    {
-                        index -= result.Count;
-                    }
-                    else
-                    {
-                        results.AddRange(result.Skip(index));
-                        index = 0;
-                    }
-                }
-            }
-            if (results.Count() > maxCount)
-            {
-                results.RemoveRange(maxCount, results.Count() - maxCount);
+                results.AddRange(result.ToList());
             }
 
             return results;

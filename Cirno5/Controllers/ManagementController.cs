@@ -9,6 +9,7 @@ using Cirno5.Models.Response;
 using System.Net.Http;
 using Cirno5.Services.Storage;
 using Cirno5.Models.Articles;
+using Cirno5.Models;
 
 namespace Cirno5.Controllers
 {
@@ -18,13 +19,11 @@ namespace Cirno5.Controllers
     {
 
         private const int defaultOutlineLength = 77;
-        private IStorage<Article> ArticleStorage { get; set; }
-        private IStorage<ArticleInfo> ArticleInfoStorage { get; set; }
+        private IStorage<BaseModel> ModelStorage { get; set; }
 
-        public ManagementController(IStorage<Article> articleStorage, IStorage<ArticleInfo> articleInfoStorage)
+        public ManagementController(IStorage<BaseModel> storage)
         {
-            this.ArticleStorage = articleStorage;
-            this.ArticleInfoStorage = articleInfoStorage;
+            this.ModelStorage = storage;
         }
 
         // POST api/management/import
@@ -38,7 +37,6 @@ namespace Cirno5.Controllers
             string articleContent = await message.Content.ReadAsStringAsync();
             Article article = new Article
             {
-                Id = Guid.NewGuid(),
                 Link = request.Link,
                 Content = articleContent,
                 ContentType = request.ContentType,
@@ -46,7 +44,6 @@ namespace Cirno5.Controllers
 
             ArticleInfo articleInfo = new ArticleInfo
             {
-                Id = Guid.NewGuid(),
                 Link = request.Link,
                 ContentType = request.ContentType,
                 CreatedDate = request.CreatedDate,
@@ -63,7 +60,7 @@ namespace Cirno5.Controllers
                 Tags = request.Tags,
             };
 
-            if ((await this.ArticleStorage.GetItemsAsync(d => d.Link == request.Link, -1, 0)).ToList().Count != 0)
+            if ((await this.ModelStorage.GetItemsAsync(d => d.Key == request.Link)).ToList().Count != 0)
             {
                 return new ErrorResponse
                 {
@@ -73,7 +70,7 @@ namespace Cirno5.Controllers
                 };
             }
 
-            if ((await this.ArticleInfoStorage.GetItemsAsync(d => d.Link == request.Link, -1, 0)).ToList().Count != 0)
+            if ((await this.ModelStorage.GetItemsAsync(d => d.Key == request.Link)).ToList().Count != 0)
             {
 
                 return new ErrorResponse
@@ -84,8 +81,8 @@ namespace Cirno5.Controllers
                 };
             }
 
-            await this.ArticleStorage.CreateAsync(article);
-            await this.ArticleInfoStorage.CreateAsync(articleInfo);
+            await this.ModelStorage.CreateAsync(article);
+            await this.ModelStorage.CreateAsync(articleInfo);
             return new ErrorResponse
             {
                 Code = 200,

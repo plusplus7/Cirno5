@@ -8,30 +8,31 @@ using Cirno5.Services.Storage;
 using Cirno5.Models.Articles;
 using Cirno5.Models.Response;
 using Microsoft.AspNetCore.Cors;
+using Cirno5.Models;
 
 namespace Cirno5.Controllers
 {
     [EnableCors("DebugPolicy")]
-    [Route("api/[controller]")]
     [ErrorFilter]
-    public class ArticleController : Controller
+    public class ItemController : Controller
     {
-        private IStorage<Article> ArticleStorage { get; set; }
+        private IStorage<BaseModel> Storage { get; set; }
 
-        public ArticleController(IStorage<Article> articleStorage)
+        public ItemController(IStorage<BaseModel> storage)
         {
-            this.ArticleStorage = articleStorage;
+            this.Storage = storage;
         }
 
-        // GET api/article/{link}
-        [HttpGet("{link}")]
-        public async Task<GetArticleResponse> GetAsync(string link)
+        // GET api/item/{itemType}/{key}
+        [Route("api/item/{itemType}/{key}")]
+        [HttpGet()]
+        public async Task<BaseResponse> GetAsync(string itemType, string key)
         {
-            return new GetArticleResponse
+            return new BaseResponse
             {
                 Code = 200,
                 Status = "OK",
-                Article = await this.ArticleStorage.GetItemAsync(x => x.Link == link),
+                Data = await this.Storage.GetItemAsync(x => x.ItemType == itemType && x.Key == key),
             };
         }
 

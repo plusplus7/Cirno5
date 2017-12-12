@@ -5,10 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Cirno5.Models.Response
+namespace Cirno5.Models
 {
-    public class GetIndexPageInfoResponse : BaseResponse
+    public class IndexPageInfo : BaseModel
     {
+        public IndexPageInfo() : base(itemType: "IndexPageInfo") { this.Key = this.Id.ToString(); }
+
         [JsonProperty(PropertyName = "personalInfomation")]
         public string PersonalInfomation { get; set; }
 

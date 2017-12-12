@@ -26,13 +26,22 @@ namespace Cirno5.Filters
                     Status = $"{ServerError}.NotImplemented",
                 };
             }
-            if (context.Exception is KeyNotFoundException)
+            else if (context.Exception is KeyNotFoundException)
             {
                 context.Result = new ErrorResponse
                 {
                     Code = 404,
                     Message = context.Exception.Message,
-                    Status = $"{BadRequest}BadRequest.NoSuchEntity",
+                    Status = $"{BadRequest}.NoSuchEntity",
+                };
+            }
+            else
+            {
+                context.Result = new ErrorResponse
+                {
+                    Code = 500,
+                    Message = context.Exception.Message,
+                    Status = $"{ServerError}.Failed",
                 };
             }
         }

@@ -17,6 +17,9 @@ namespace Cirno5.Models.Response
         [JsonProperty(PropertyName = "status")]
         public string Status { get; set; }
 
+        [JsonProperty(PropertyName = "data")]
+        public BaseModel Data { get; set; }
+
         public async Task ExecuteResultAsync(ActionContext context)
         {
             context.HttpContext.Response.StatusCode = this.Code;
