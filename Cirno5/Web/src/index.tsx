@@ -1,14 +1,10 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
+import * as React from 'react';
+import { render } from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
+import { AppPage } from './pages/AppPage';
 
-import { HashRouter, Switch } from "react-router-dom";
-import { AppRoute } from "./components/AppRoute";
-
-ReactDOM.render(
-  <HashRouter>
-    <Switch>
-      <AppRoute />
-    </Switch>
-  </HashRouter>,
-  document.getElementById("example")
-);
+render(
+    <BrowserRouter>
+        <AppPage />
+    </BrowserRouter>
+, document.getElementById('root'));

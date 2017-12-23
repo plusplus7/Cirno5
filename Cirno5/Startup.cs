@@ -44,6 +44,8 @@ namespace Cirno5
 
             NoSqlConnection connection = null;
             NoSqlItemStorage<BaseModel> storage = null;
+            NoSqlItemStorage<Article> articleStorage = null;
+            NoSqlItemStorage<ArticleInfo> articleInfoStorage = null;
             if (Configuration["Environment"].Equals("Dev"))
             {
                 connection = new NoSqlConnection(
@@ -58,10 +60,22 @@ namespace Cirno5
                     Connection = connection,
                     DocumentClient = connection.GetClient(),
                 };
+                articleStorage = new NoSqlItemStorage<Article>
+                {
+                    Connection = connection,
+                    DocumentClient = connection.GetClient(),
+                };
+                articleInfoStorage = new NoSqlItemStorage<ArticleInfo>
+                {
+                    Connection = connection,
+                    DocumentClient = connection.GetClient(),
+                };
                 this.IntializeDatabase(storage).Wait();
             }
 
             services.AddSingleton<IStorage<BaseModel>>(storage);
+            services.AddSingleton<IStorage<Article>>(articleStorage);
+            services.AddSingleton<IStorage<ArticleInfo>>(articleInfoStorage);
 
         }
 

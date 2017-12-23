@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace Cirno5.Models.Response
         public string Status { get; set; }
 
         [JsonProperty(PropertyName = "data")]
-        public BaseModel Data { get; set; }
+        public JObject Data { get; set; }
 
         public async Task ExecuteResultAsync(ActionContext context)
         {
