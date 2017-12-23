@@ -205,7 +205,6 @@
     ],
     "possible-timing-attack": true,
     "prefer-array-literal": true,
-    "prefer-const": true,
     "prefer-for-of": false,
     "prefer-function-over-method": false,
     "prefer-method-signature": true,
@@ -250,8 +249,7 @@
     "trailing-comma": [
       true,
       {
-        "singleline": "never",
-        "multiline": "never"
+        "singleline": "never"
       }
     ],
     "triple-equals": [
@@ -273,7 +271,6 @@
     "use-isnan": true,
     "use-named-parameter": true,
     "valid-typeof": true,
-    "variable-name": true,
     "whitespace": [
       true,
       "check-branch",

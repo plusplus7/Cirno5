@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Welcome } from '../components/Welcome';
 import { Switch, Route, Link } from 'react-router-dom';
 import { BlogListPage } from './BlogListPage';
-import { BlogPage } from './BlogPage';
+import { ArticlePage } from './ArticlePage';
 
 export class AppPage extends React.Component {
     public render() {
@@ -16,7 +16,7 @@ export class AppPage extends React.Component {
                 </ul>
                 <Switch>
                     <Route exact path='/blog' render={() => <BlogListPage />} />
-                    <Route path='/blog/:key' render={(props) => <BlogPage text={props.match.params.key} />} />
+                    <Route path='/blog/:key' render={(props) => <ArticlePage link={props.match.params.key} />} />
                     <Route path='/about'  render={() => <div>414124141412124</div>}/>
                 </Switch>
             </div>
