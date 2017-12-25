@@ -65,7 +65,7 @@ export class CirnoApi implements ICirnoApi {
             '/api/article/' + link,
             {},
             (response: AxiosResponse) => {
-                success(response.data);
+                success(response.data.data.content);
             },
             (error: any) => {
                 failed(error);
@@ -73,19 +73,24 @@ export class CirnoApi implements ICirnoApi {
         );
     }
 
-    public GetArticleInfos(
+    public GetArticleList(
         tag: string,
-        maxCount: number, index: number, before: () => void, success: (data: ArticleInfo[]) => void, failed: (error: any) => void): void {
+        maxCount: number,
+        token: string,
+        before: () => void,
+        success: (data: ArticleInfo[], token: string) => void,
+        failed: (error: any) => void): void {
+
         if (before !== null) {
             before();
         }
 
         this.invokeMethod(
             'get',
-            '/api/articleInfos?' + 'tag=' + tag + '&' + 'maxCount=' + maxCount + '&' + 'index' + index,
+            '/api/articleInfo/' + tag + '?' + 'maxCount=' + maxCount,
             {},
             (response: AxiosResponse) => {
-                success(response.data);
+                success(response.data.data, response.data.continuationToken);
             },
             (error: any) => {
                 failed(error);

@@ -18,7 +18,7 @@ namespace Cirno5.Services.Storage.Nosql
         public IDocumentClient DocumentClient { get; set; }
         public NoSqlConnection Connection { get; set; }
 
-        public async Task CreateAsync(T item)
+        public async Task UpsertAsync(T item)
         {
             var result = JObject.FromObject(item);
             await DocumentClient.UpsertDocumentAsync(
@@ -46,7 +46,7 @@ namespace Cirno5.Services.Storage.Nosql
 
         public async Task<T> GetItemAsync(Expression<Func<T, bool>> predicate)
         {
-            var results = await this.GetItemsAsync(predicate);
+            var results = (await this.GetItemsAsync(predicate)).Item1;
             if (results.ToList().Count == 0)
             {
                 throw new KeyNotFoundException($"{typeof(T).FullName}: No such entity");
@@ -60,7 +60,7 @@ namespace Cirno5.Services.Storage.Nosql
             return results.First();
         }
 
-        public async Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> predicate, int maxCount = 1, string continuationToken = null)
+        public async Task<Tuple<IEnumerable<T>, string>> GetItemsAsync(Expression<Func<T, bool>> predicate, int maxCount = 1, string continuationToken = null)
         {
             IDocumentQuery<T> query = this.DocumentClient.CreateDocumentQuery<T>(
                 this.Connection.GetCollectionUri(),
@@ -73,13 +73,15 @@ namespace Cirno5.Services.Storage.Nosql
                 .AsDocumentQuery();
 
             List<T> results = new List<T>();
+            string newToken = null;
             while (query.HasMoreResults)
             {
                 FeedResponse<T> result = await query.ExecuteNextAsync<T>();
                 results.AddRange(result.ToList());
+                newToken = result.ResponseContinuation;
             }
 
-            return results;
+            return new Tuple<IEnumerable<T>, string>(results, newToken);
         }
     }
 

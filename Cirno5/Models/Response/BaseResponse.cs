@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Cirno5.Models.Response
 {
-    public class BaseResponse : IActionResult
+    public class BaseResponse<T> : IActionResult
     {
         [JsonProperty(PropertyName = "code")]
         public int Code { get; set; }
@@ -19,7 +19,7 @@ namespace Cirno5.Models.Response
         public string Status { get; set; }
 
         [JsonProperty(PropertyName = "data")]
-        public JObject Data { get; set; }
+        public T Data { get; set; }
 
         public async Task ExecuteResultAsync(ActionContext context)
         {

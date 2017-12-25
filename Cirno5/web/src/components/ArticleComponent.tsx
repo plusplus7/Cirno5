@@ -21,20 +21,19 @@ export type ArticleComponentProps = ArticleComponentFunctions & ArticleComponent
 export class ArticleComponent extends React.Component<ArticleComponentProps> {
     private LoadArticle(link: string): void {
         api.GetArticle(link,
-            () => {
-                this.props.onArticleLoading();
-            },
-            (article: Article) => {
-                this.props.onArticleLoaded(article);
-            },
-            (error: string) => {
-                this.props.onArticleLoadingError(error);
-            }
+            () => this.props.onArticleLoading(),
+            (article: Article) => this.props.onArticleLoaded(article),
+            (error: string) => this.props.onArticleLoadingError(error)
         );
     }
 
+    public componentDidMount() {
+        if (this.props.status === 'Init' || (this.props.article !== null && this.props.link !== this.props.article.link)) {
+            this.LoadArticle(this.props.link);
+        }
+    }
+
     public render() {
-        console.log(this.props);
         if (this.props.status === 'Init' || this.props.status === 'Loading') {
             return <div>Loading...</div>;
         } else if (this.props.status === 'Done') {
@@ -42,7 +41,7 @@ export class ArticleComponent extends React.Component<ArticleComponentProps> {
                 <div>{JSON.stringify(this.props.article)}</div>
             );
         } else {
-            return <div>Failed...{this.props.error}</div>;
+            return <div>Failed...</div>;
         }
     }
 }

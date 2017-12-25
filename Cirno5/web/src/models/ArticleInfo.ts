@@ -1,4 +1,4 @@
-import {ArticleInfoContent } from './ArticleInfoContent';
+import { ArticleInfoContent } from './ArticleInfoContent';
 export interface ArticleInfo {
     id: string;
     link: string;

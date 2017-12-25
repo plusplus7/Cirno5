@@ -43,7 +43,6 @@ namespace Cirno5
             }));
 
             NoSqlConnection connection = null;
-            NoSqlItemStorage<BaseModel> storage = null;
             NoSqlItemStorage<Article> articleStorage = null;
             NoSqlItemStorage<ArticleInfo> articleInfoStorage = null;
             if (Configuration["Environment"].Equals("Dev"))
@@ -55,11 +54,6 @@ namespace Cirno5
                 "https://localhost:8081/");
                 connection.CreateDatabaseIfNotExistsAsync().Wait();
                 connection.CreateCollectionIfNotExistsAsync().Wait();
-                storage = new NoSqlItemStorage<BaseModel>
-                {
-                    Connection = connection,
-                    DocumentClient = connection.GetClient(),
-                };
                 articleStorage = new NoSqlItemStorage<Article>
                 {
                     Connection = connection,
@@ -70,10 +64,9 @@ namespace Cirno5
                     Connection = connection,
                     DocumentClient = connection.GetClient(),
                 };
-                this.IntializeDatabase(storage).Wait();
+                this.IntializeDatabase(articleStorage, articleInfoStorage).Wait();
             }
 
-            services.AddSingleton<IStorage<BaseModel>>(storage);
             services.AddSingleton<IStorage<Article>>(articleStorage);
             services.AddSingleton<IStorage<ArticleInfo>>(articleInfoStorage);
 
@@ -92,30 +85,54 @@ namespace Cirno5
             app.UseMvc();
         }
 
-        private async Task IntializeDatabase(NoSqlItemStorage<BaseModel> storage)
+        private async Task IntializeDatabase(NoSqlItemStorage<Article> articleStorage, NoSqlItemStorage<ArticleInfo> articleInfoStorage)
         {
-            await storage.CreateAsync(new IndexPageInfo
+            for (var i = 0; i< 10; i ++)
             {
-                Id = Guid.Parse("0e7eb3f8-39aa-46ba-95ee-3c5f719d6f65"),
-                Key = "0e7eb3f8-39aa-46ba-95ee-3c5f719d6f65",
-                PersonalInfomation = "plusplus7's blog",
-                AvatarUrl = "http://7xlt42.com1.z0.glb.clouddn.com/blog_avatar.png-fullpercent",
-                Description = new List<string>
+                await articleStorage.UpsertAsync(new Article
                 {
-                "Hi, 欢迎来到我的个人博客abasdfasdfasdfasdfasdf",
-                "Life is tough",
-                "Take it easy:)",
+                    Id = Guid.Parse($"00000000-0000-0000-0000-00000000000{i}"),
+                    Link = $"Test{i}",
+                    ContentType = "Markdown",
+                    Content = $"{i} - Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
+                "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
+                "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. " +
+                "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. " +
+                "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                });
+            }
 
-                },
-                NavbarButtonTexts = new Dictionary<string, string>
+            for (var i = 0; i< 10; i ++)
+            {
+                await articleInfoStorage.UpsertAsync(new ArticleInfo
                 {
-
-                    { "Home", "主页" },
-                    { "Aboutme", "关于我" },
-                    { "Blog", "博客" },
-                    {  "Storage", "储物间" },
-                }
-            });
+                    Id = Guid.Parse($"10000000-0000-0000-0000-00000000000{i}"),
+                    Link = $"Test{i}",
+                    ContentType = "Markdown",
+                    CreatedDate = DateTime.Now.Subtract(TimeSpan.FromDays(1)),
+                    Content = new ArticleInfoContent
+                    {
+                        Type = "Markdown",
+                        Content = new Dictionary<string, string>
+                        {
+                            { "author", "+7" },
+                            { "title", $"Test - {i}"},
+                            { "content", $"{i} - Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
+                                         "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
+                                         "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. " +
+                                         "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. " +
+                                         "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                            }
+                        }
+                    },
+                    Tags = new List<string>
+                    {
+                        new Random().Next()%2 == 0 ? "Index" : "News",
+                        new Random().Next()%2 == 0 ? "Entertainment" : "Politics",
+                        new Random().Next()%2 == 0 ? "Games" : "Funny",
+                    }
+                });
+            }
         }
     }
 }

@@ -12,6 +12,6 @@ namespace Cirno5.Models.Articles
         public string Type { get; set;  }
 
         [JsonProperty(PropertyName = "content")]
-        public Dictionary<string, string> Content { get; set; }
+        public IDictionary<string, string> Content { get; set; }
     }
 }

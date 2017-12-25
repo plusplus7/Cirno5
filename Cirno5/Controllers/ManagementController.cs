@@ -19,17 +19,19 @@ namespace Cirno5.Controllers
     {
 
         private const int defaultOutlineLength = 77;
-        private IStorage<BaseModel> ModelStorage { get; set; }
+        private IStorage<Article> ArticleStorage { get; set; }
+        private IStorage<ArticleInfo> ArticleInfoStorage { get; set; }
 
-        public ManagementController(IStorage<BaseModel> storage)
+        public ManagementController(IStorage<Article> articleStorage, IStorage<ArticleInfo> articleInfoStorage)
         {
-            this.ModelStorage = storage;
+            this.ArticleStorage = articleStorage;
+            this.ArticleInfoStorage = articleInfoStorage;
         }
 
         // POST api/management/import
         [Route("import")]
         [HttpPost]
-        public async Task<BaseResponse> PostAsync([FromBody] ImportArticleRequest request)
+        public async Task<BaseResponse<string>> PostAsync([FromBody] ImportArticleRequest request)
         {
             HttpClient client = new HttpClient();
             HttpResponseMessage message = await client.GetAsync(request.ContentUrl);
@@ -60,7 +62,7 @@ namespace Cirno5.Controllers
                 Tags = request.Tags,
             };
 
-            if ((await this.ModelStorage.GetItemsAsync(d => d.Key == request.Link)).ToList().Count != 0)
+            if ((await this.ArticleInfoStorage.GetItemsAsync(d => d.Link == request.Link)).Item1.ToList().Count != 0)
             {
                 return new ErrorResponse
                 {
@@ -70,7 +72,7 @@ namespace Cirno5.Controllers
                 };
             }
 
-            if ((await this.ModelStorage.GetItemsAsync(d => d.Key == request.Link)).ToList().Count != 0)
+            if ((await this.ArticleStorage.GetItemsAsync(d => d.Link == request.Link)).Item1.ToList().Count != 0)
             {
 
                 return new ErrorResponse
@@ -81,13 +83,13 @@ namespace Cirno5.Controllers
                 };
             }
 
-            await this.ModelStorage.CreateAsync(article);
-            await this.ModelStorage.CreateAsync(articleInfo);
-            return new ErrorResponse
+            await this.ArticleStorage.UpsertAsync(article);
+            await this.ArticleInfoStorage.UpsertAsync(articleInfo);
+            return new BaseResponse<string>
             {
                 Code = 200,
                 Status = "OK",
-                Message = "",
+                Data = "",
             };
         }
 

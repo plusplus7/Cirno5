@@ -1,4 +1,4 @@
 export interface ArticleInfoContent {
-    type: 'A';
+    type: 'Markdown';
     properties: {[property: string]: string};
 }

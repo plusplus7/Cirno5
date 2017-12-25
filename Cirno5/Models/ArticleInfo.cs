@@ -8,24 +8,10 @@ namespace Cirno5.Models.Articles
 {
     public class ArticleInfo : BaseModel
     {
-        public ArticleInfo() : base(itemType: "ArticleInfo") { }
+        public ArticleInfo() : base(itemType: BaseItemType.ArticleInfo) { }
 
         [JsonProperty(PropertyName = "link")]
-        private string link;
-
-        [JsonIgnore]
-        public string Link
-        {
-            get
-            {
-                return this.link;
-            }
-            set
-            {
-                this.Key = value;
-                this.link = value;
-            }
-        }
+        public string Link { get; set; }
 
         [JsonProperty(PropertyName = "contentType")]
         public string ContentType { get; set; }

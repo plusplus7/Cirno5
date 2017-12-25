@@ -9,7 +9,7 @@ namespace Cirno5.Models
 {
     public class IndexPageInfo : BaseModel
     {
-        public IndexPageInfo() : base(itemType: "IndexPageInfo") { this.Key = this.Id.ToString(); }
+        public IndexPageInfo() : base(itemType: BaseItemType.IndexPageInfo) { }
 
         [JsonProperty(PropertyName = "personalInfomation")]
         public string PersonalInfomation { get; set; }

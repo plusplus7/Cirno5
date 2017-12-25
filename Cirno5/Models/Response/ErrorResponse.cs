@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cirno5.Models.Response
 {
-    public class ErrorResponse : BaseResponse
+    public class ErrorResponse : BaseResponse<string>
     {
         [JsonProperty(PropertyName = "message")]
         public string Message { get; set; }

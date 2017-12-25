@@ -12,14 +12,34 @@ export interface ArticleLoading {
     type: 'ARTICLE_LOADING';
 }
 
+export function onArticleLoading(): ArticleLoading {
+    return {
+        type: 'ARTICLE_LOADING'
+    };
+}
+
 export interface ArticleLoaded {
     type: 'ARTICLE_LOADED';
     article: Article;
 }
 
+export function onArticleLoaded(article: Article): ArticleLoaded {
+    return {
+        type: 'ARTICLE_LOADED',
+        article: article
+    };
+}
+
 export interface ArticleLoadingError {
     type: 'ARTICLE_LOADING_ERROR';
     error: string;
+}
+
+export function onArticleLoadingError(error: string): ArticleLoadingError {
+    return {
+        type: 'ARTICLE_LOADING_ERROR',
+        error: error,
+    };
 }
 
 const defaultState: ArticleState = {
@@ -30,7 +50,7 @@ const defaultState: ArticleState = {
 
 export type ArticleActions = ArticleLoading | ArticleLoaded | ArticleLoadingError;
 
-export const article: Reducer<ArticleState> = (state: ArticleState, action: ArticleActions) => {
+export const ArticleReducer: Reducer<ArticleState> = (state: ArticleState, action: ArticleActions) => {
     let next = state === undefined ? defaultState :  { ...state };
 
     switch (action.type) {

@@ -10,8 +10,8 @@ const store = createStore(CirnoApp);
 
 render(
     <Provider store={store}>
-    <BrowserRouter>
-        <AppPage />
-    </BrowserRouter>
+        <BrowserRouter>
+            <AppPage />
+        </BrowserRouter>
     </Provider>
 , document.getElementById('root'));

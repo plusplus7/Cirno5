@@ -15,41 +15,42 @@ namespace Cirno5.Controllers
 {
     [EnableCors("DebugPolicy")]
     [ErrorFilter]
-    public class ItemController : Controller
+    public class ArticlesController : Controller
     {
         private IStorage<Article> ArticleStorage { get; set; }
         private IStorage<ArticleInfo> ArticleInfoStorage { get; set; }
 
 
-        public ItemController(IStorage<Article> articleStorage, IStorage<ArticleInfo> articleInfoStorage)
+        public ArticlesController(IStorage<Article> articleStorage, IStorage<ArticleInfo> articleInfoStorage)
         {
             this.ArticleStorage = articleStorage;
             this.ArticleInfoStorage = articleInfoStorage;
         }
 
-        // GET api/item/{itemType}/{key}
-        [Route("api/item/{itemType}/{key}")]
+        [Route("api/article/{link}")]
         [HttpGet()]
-        public async Task<BaseResponse> GetAsync(string itemType, string key)
+        public async Task<BaseResponse<Article>> GetArticleAsync(string link)
         {
-            JObject result = null;
-            if (itemType == "Article")
-            {
-                result = JObject.FromObject(await this.ArticleStorage.GetItemAsync(x => x.ItemType == itemType && x.Key == key));
-            }
-            else if (itemType == "ArticleInfo")
-            {
-                result = JObject.FromObject(await this.ArticleInfoStorage.GetItemAsync(x => x.ItemType == itemType && x.Key == key));
-            }
-            else
-            {
-                throw new ArgumentException("Type not supported");
-            }
-            return new BaseResponse
+            return new BaseResponse<Article>
             {
                 Code = 200,
                 Status = "OK",
-                Data = result
+                Data = await this.ArticleStorage.GetItemAsync(x => x.ItemType == BaseItemType.Article && x.Link == link)
+            };
+        }
+
+        [Route("api/articleInfo/{tag}")]
+        [HttpGet()]
+        public async Task<BaseResponse<IEnumerable<ArticleInfo>>> GetArticleInfosAsync(string tag = "Index", [FromQuery] string token = null)
+        {
+            var response = await this.ArticleInfoStorage.GetItemsAsync(x => x.ItemType == BaseItemType.ArticleInfo && x.Tags.Contains<string>(tag), maxCount: 5, continuationToken: token);
+            return new BaseListResponse<IEnumerable<ArticleInfo>>
+            {
+                Code = 200,
+                Status = "OK",
+                Data = response.Item1,
+                ContinuationToken = response.Item2
+                
             };
         }
 

@@ -8,7 +8,7 @@ namespace Cirno5.Models
 {
     public class BaseModel
     {
-        public BaseModel(string itemType)
+        public BaseModel(BaseItemType itemType)
         {
             this.ItemType = itemType;
             this.Id = Guid.NewGuid();
@@ -17,10 +17,7 @@ namespace Cirno5.Models
         [JsonProperty(PropertyName = "id")]
         public Guid Id { get; set; }
 
-        [JsonProperty(PropertyName = "key")]
-        public string Key { get; set; }
-
         [JsonProperty(PropertyName = "itemType")]
-        public string ItemType { get; set; }
+        public BaseItemType ItemType { get; set; }
     }
 }

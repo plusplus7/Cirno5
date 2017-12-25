@@ -5,9 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Webopld\**" />
     <Compile Remove="Web\**" />
+    <Content Remove="Webopld\**" />
     <Content Remove="Web\**" />
+    <EmbeddedResource Remove="Webopld\**" />
     <EmbeddedResource Remove="Web\**" />
+    <None Remove="Webopld\**" />
     <None Remove="Web\**" />
   </ItemGroup>
   <ItemGroup>
